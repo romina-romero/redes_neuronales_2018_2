@@ -80,7 +80,7 @@ def main():
     train_set = generateRandomPoins(1000)
     valid_set = generateRandomPoins(1000)
 
-    train_set_sizes = [10,50,100,250,500,750,1000]
+    train_set_sizes = range(1,1000,10) #[10,50,100,250,500,750,1000]
     learning_rates = [0.1,0.5,1.5]
 
     subplot_index = 0
