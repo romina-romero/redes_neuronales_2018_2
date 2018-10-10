@@ -1,18 +1,18 @@
 from Tester import Tester
 from Perceptron import Perceptron
 from testUtils import SimpleLine
-from testUtils import generateRandomPoins
+from testUtils import generateRandomPoints
 
 
 def main():
     tester = Tester()
 
     line = SimpleLine(1.5,10)
-    train_set = generateRandomPoins(1000)
-    valid_set = generateRandomPoins(1000)
+    train_set = generateRandomPoints(1000)
+    valid_set = generateRandomPoints(1000)
     results_valid_set = []
     for (x,y) in valid_set:
-        results_valid_set.append(not line.isUpperLine(x,y))
+        results_valid_set.append(line.isUpperLine(x,y))
 
     train_set_sizes = range(1,1000,10) #[10,50,100,250,500,750,1000]
     learning_rates = [0.1,0.5,1.5]

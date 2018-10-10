@@ -18,6 +18,7 @@ class Tester:
 		return corrects*1.0/total
 
 	def plot(self,x,y,title=''):
+		plt.ylim([0,1])
 		plt.plot(x,y)
 		plt.title(title)
 		plt.show()

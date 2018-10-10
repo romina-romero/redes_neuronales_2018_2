@@ -1,15 +1,16 @@
 from Tester import Tester
 from SigmoidNeuron import SigmoidNeuron
 from testUtils import SimpleLine
-from testUtils import generateRandomPoins
+from testUtils import generateRandomPoints
+from testUtils import ifhalf
 
 
 def main():
     tester = Tester()
 
     line = SimpleLine(1.5,10)
-    train_set = generateRandomPoins(1000)
-    valid_set = generateRandomPoins(1000)
+    train_set = generateRandomPoints(1000)
+    valid_set = generateRandomPoints(1000)
     results_valid_set = []
     for (x,y) in valid_set:
         results_valid_set.append(line.isUpperLine(x,y)>0.5)
@@ -24,7 +25,7 @@ def main():
             for index in range(train_set_size):
                 (x,y) = train_set[index]
                 perceptron.train([x,y],line.isUpperLine(x,y))
-            precisions.append(tester.test(perceptron,valid_set,results_valid_set))
+            precisions.append(tester.test(perceptron,valid_set,results_valid_set,ifhalf))
         tester.plot(train_set_sizes,precisions,"Presiciones por numero de muestras de entrenamiento, lr %.1f" % (lr))
 
 if __name__ == '__main__':

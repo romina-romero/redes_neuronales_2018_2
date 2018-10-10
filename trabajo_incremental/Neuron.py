@@ -15,7 +15,7 @@ class Neuron:
 
     def train(self,input_values,real_output):
         desired_output = self.feed(input_values)
-        diff = desired_output-real_output
+        diff = real_output - desired_output
 
         for index in range(len(self.weights)):
             self.weights[index] = self.weights[index]+self.lr*input_values[index]*diff
