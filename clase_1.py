@@ -4,13 +4,16 @@ class Perceptron:
     def __init__(self,weights,bias):
         self.weights = weights
         self.bias = bias
-    def feed(self,input_values):
-        cross_product = 0
-        for index in range(len(self.weights)):
-            cross_product+=self.weights[index]*input_values[index]
-        if cross_product+self.bias>0:
+    def activation_function(self,z):
+        if z+self.bias>0:
             return 1
         return 0
+
+    def feed(self,input_values):
+        z = 0
+        for index in range(len(self.weights)):
+            z+=self.weights[index]*input_values[index]
+        return self.activation_function(z)
 
 
 class Binary_op:
