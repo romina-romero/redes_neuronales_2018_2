@@ -2,7 +2,7 @@ import unittest
 from Neuron import Neuron
 class Perceptron(Neuron):
     def activation_function(self,z):
-        if z+self.bias>0:
+        if z>0:
             return 1
         return 0
 

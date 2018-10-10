@@ -11,6 +11,7 @@ class Neuron:
         z = 0
         for index in range(len(self.weights)):
             z+=self.weights[index]*input_values[index]
+        z+=self.bias
         return self.activation_function(z)
 
     def train(self,input_values,real_output):

@@ -41,6 +41,6 @@ def trainAND(perceptron):
 def trainOR(perceptron):
     xs = [0,0,1,1]
     ys = [0,1,0,1]
-    rs = [0,0,0,1]
+    rs = [0,1,1,1]
     index = random.randint(0,3)
     perceptron.train([xs[index],ys[index]],rs[index])
