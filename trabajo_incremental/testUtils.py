@@ -23,7 +23,6 @@ def generateRandomPoints(n):
         pointsList.append((random.randint(-10000,10000),random.randint(-10000,10000)))
     return pointsList
 
-
 def trainXOR(perceptron):
     xs = [0,0,1,1]
     ys = [0,1,0,1]

@@ -3,6 +3,8 @@ class Neuron:
         self.weights = weights
         self.bias = bias
         self.lr = lr
+        self.current_output = None
+        self.current_delta = None
     def activation_function(self,z):
         '''interfaz'''
         return 0
@@ -12,12 +14,18 @@ class Neuron:
         for index in range(len(self.weights)):
             z+=self.weights[index]*input_values[index]
         z+=self.bias
-        return self.activation_function(z)
+        self.current_output= self.activation_function(z)
+        return self.current_output
 
-    def train(self,input_values,real_output):
-        desired_output = self.feed(input_values)
-        diff = real_output - desired_output
+    def _transferDerivative(self,value):
+        return value*(1.0-value)
+   
+    def back_propagation(self,error):
+        self.current_delta = error*self._transferDerivative(self.current_output)
 
+    def train(self,input_values):
+        #desired_output = self.feed(input_values)
+        #diff = real_output - desired_output
         for index in range(len(self.weights)):
-            self.weights[index] = self.weights[index]+self.lr*input_values[index]*diff
-        self.bias = self.bias+self.lr*diff
+            self.weights[index] = self.weights[index]+self.lr*input_values[index]*self.current_delta
+        self.bias = self.bias+self.lr*self.current_delta
