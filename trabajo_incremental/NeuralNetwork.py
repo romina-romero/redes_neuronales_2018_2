@@ -1,6 +1,7 @@
 import random
 from SigmoidNeuron import SigmoidNeuron
 from NeuronLayer import NeuronLayer
+import unittest
 
 class NeuralNetwork:
     def __init__(self,layers=[]):
@@ -26,7 +27,10 @@ class NeuralNetwork:
                 neurons.append(SigmoidNeuron(weights,bias,lr))
             self.layers.append(NeuronLayer(neurons))
 
-    def train(self,input_values,output_values):
+    def train(self,input_values,output_values,nbepoch=None):
+        if nbepoch is not None:
+            train_with_dataset(input_values,output_values,nbepoch)
+            return
         #evaluar la red
         outputs = self.feed(input_values)
         #error ultima capa
@@ -52,3 +56,28 @@ class NeuralNetwork:
         prev_outputs = input_values
         for index in range(len(self.layers)):
             prev_outputs = self.layers[index].train(prev_outputs)
+
+    def train_with_dataset(self,dataset,output_values,nbepoch):
+        #entrenar con dataset entero. calcular error cuadratico sum(exp-real)2
+
+        pass
+
+class TestMakeNeuralNetwork(unittest.TestCase):
+    def testMake(self):
+        n = NeuralNetwork()
+        n.make(5,[2,3],0.5)
+        self.assertEqual(len(n.layers),2)
+        #capa 1
+        self.assertEqual(len(n.layers[0].neurons),2)
+        self.assertEqual(len(n.layers[0].neurons[0].weights),5)
+        self.assertEqual(len(n.layers[0].neurons[1].weights),5)
+        #capa 2
+        self.assertEqual(len(n.layers[1].neurons),3)
+        self.assertEqual(len(n.layers[1].neurons[0].weights),2)
+        self.assertEqual(len(n.layers[1].neurons[1].weights),2)
+        self.assertEqual(len(n.layers[1].neurons[2].weights),2)
+        #salidas
+        self.assertEqual(len(n.feed([1,2,3,4,5])),3)
+
+if __name__ == '__main__':
+    unittest.main()

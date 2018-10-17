@@ -21,7 +21,7 @@ def main():
             trainXORWithNetwork(neuralNetwork)
         presitions.append(tester.testNetwork(neuralNetwork,[[0,0],[0,1],[1,0],[1,1]],[[0],[1],[1],[0]]))
     
-    tester.plot(train_set_sizes,presitions, "Red neuronal entrenada con XOR")
+    tester.plot(train_set_sizes,presitions, "Red neuronal con 2 neuronas en c.o. y 1 salida, entrenada con XOR")
 
 
 if __name__ == '__main__':

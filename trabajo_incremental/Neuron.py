@@ -23,6 +23,13 @@ class Neuron:
     def back_propagation(self,error):
         self.current_delta = error*self._transferDerivative(self.current_output)
 
+    def trainLonely(self,input_values,real_output):
+        desired_output = self.feed(input_values)
+        diff = real_output - desired_output
+        for index in range(len(self.weights)):
+            self.weights[index] = self.weights[index]+self.lr*input_values[index]*diff
+        self.bias = self.bias+self.lr*diff
+
     def train(self,input_values):
         #desired_output = self.feed(input_values)
         #diff = real_output - desired_output

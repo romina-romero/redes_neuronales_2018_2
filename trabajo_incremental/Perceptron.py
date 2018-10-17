@@ -48,7 +48,7 @@ class Sum_bits:
         result = self.nand_obj.result(r2_1,r2_2)
         return Sum_result(result,carry)
 
-class TestStringMethods(unittest.TestCase):
+class TestPerceptronMethods(unittest.TestCase):
     def test_and(self):
         and_obj = And()
         self.assertEqual(and_obj.result(1,1),1)

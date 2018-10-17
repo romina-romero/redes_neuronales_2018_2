@@ -24,7 +24,7 @@ def main():
             perceptron = SigmoidNeuron([2,2],2,lr)
             for index in range(train_set_size):
                 (x,y) = train_set[index]
-                perceptron.train([x,y],line.isUpperLine(x,y))
+                perceptron.trainLonely([x,y],line.isUpperLine(x,y))
             precisions.append(tester.test(perceptron,valid_set,results_valid_set,ifhalf))
         tester.plot(train_set_sizes,precisions,"Presiciones por numero de muestras de entrenamiento, lr %.1f" % (lr))
 

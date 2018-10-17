@@ -28,18 +28,18 @@ def trainXOR(perceptron):
     ys = [0,1,0,1]
     rs = [0,1,1,0]
     index = random.randint(0,3)
-    perceptron.train([xs[index],ys[index]],rs[index])
+    perceptron.trainLonely([xs[index],ys[index]],rs[index])
 
 def trainAND(perceptron):
     xs = [0,0,1,1]
     ys = [0,1,0,1]
     rs = [0,0,0,1]
     index = random.randint(0,3)
-    perceptron.train([xs[index],ys[index]],rs[index])
+    perceptron.trainLonely([xs[index],ys[index]],rs[index])
 
 def trainOR(perceptron):
     xs = [0,0,1,1]
     ys = [0,1,0,1]
     rs = [0,1,1,1]
     index = random.randint(0,3)
-    perceptron.train([xs[index],ys[index]],rs[index])
+    perceptron.trainLonely([xs[index],ys[index]],rs[index])
