@@ -29,8 +29,7 @@ class NeuralNetwork:
 
     def train(self,input_values,output_values,nbepoch=None):
         if nbepoch is not None:
-            train_with_dataset(input_values,output_values,nbepoch)
-            return
+            return self.train_with_dataset(input_values,output_values,nbepoch)
         #evaluar la red
         outputs = self.feed(input_values)
         #error ultima capa
@@ -56,11 +55,17 @@ class NeuralNetwork:
         prev_outputs = input_values
         for index in range(len(self.layers)):
             prev_outputs = self.layers[index].train(prev_outputs)
+        return error
 
-    def train_with_dataset(self,dataset,output_values,nbepoch):
+    def train_with_dataset(self,dataset,outputs_values,nbepoch):
         #entrenar con dataset entero. calcular error cuadratico sum(exp-real)2
-
-        pass
+        errors = []
+        for epoch in range(nbepoch):
+            error = 0
+            for index in range(len(dataset)):
+                error+=self.train(dataset[index],outputs_values[index])**2
+            errors.append(error)
+        return errors   
 
 class TestMakeNeuralNetwork(unittest.TestCase):
     def testMake(self):
@@ -79,5 +84,58 @@ class TestMakeNeuralNetwork(unittest.TestCase):
         #salidas
         self.assertEqual(len(n.feed([1,2,3,4,5])),3)
 
+    def testCase1(self):
+        n = NeuralNetwork()
+        n.make(2,[1,1],0.5)
+        neuron1 = n.layers[0].neurons[0]
+        neuron1.bias = 0.5
+        neuron1.weights = [0.4,0.3]
+
+        neuron2 = n.layers[1].neurons[0] 
+        neuron2.bias = 0.4
+        neuron2.weights = [0.3]
+
+        n.train([1,1],[1])
+
+        self.assertAlmostEqual(neuron1.bias,0.502101508999489)
+        self.assertAlmostEqual(neuron1.weights[0],0.40210150899948904)
+        self.assertAlmostEqual(neuron1.weights[1],0.302101508999489)
+
+        self.assertAlmostEqual(neuron2.bias,0.43937745312797394)
+        self.assertAlmostEqual(neuron2.weights[0],0.33026254863991883)
+
+    def testCase2(self):
+        n = NeuralNetwork()
+        n.make(2,[2,2],0.5)
+        neuron1 = n.layers[0].neurons[0]
+        neuron2 = n.layers[0].neurons[1]
+        neuron3 = n.layers[1].neurons[0]
+        neuron4 = n.layers[1].neurons[1]
+
+        neuron1.bias = 0.5
+        neuron1.weights = [0.7,0.3]
+        neuron2.bias = 0.4
+        neuron2.weights = [0.3,0.7]
+        neuron3.bias = 0.3
+        neuron3.weights = [0.2,0.3]
+        neuron4.bias = 0.6
+        neuron4.weights = [0.4,0.2]
+        n.train([1,1],[1,1])
+        self.assertAlmostEqual(neuron1.bias,0.5025104485493278)
+        self.assertAlmostEqual(neuron1.weights[0],0.7025104485493278)
+        self.assertAlmostEqual(neuron1.weights[1],0.3025104485493278)
+
+        self.assertAlmostEqual(neuron2.bias,0.40249801135748337)
+        self.assertAlmostEqual(neuron2.weights[0],0.30249802235748333)
+        self.assertAlmostEqual(neuron2.weights[1],0.7024980113574834)
+        
+        self.assertAlmostEqual(neuron3.bias,0.3366295422515899)
+        self.assertAlmostEqual(neuron3.weights[0],0.22994737881955657)
+        self.assertAlmostEqual(neuron3.weights[1],0.32938362863950127)
+        
+        self.assertAlmostEqual(neuron4.bias,0.6237654881509048)
+        self.assertAlmostEqual(neuron4.weights[0],0.41943005652646226)
+        self.assertAlmostEqual(neuron4.weights[1],0.21906429169838573)
+        
 if __name__ == '__main__':
     unittest.main()

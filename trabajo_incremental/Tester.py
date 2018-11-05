@@ -36,3 +36,11 @@ class Tester:
         plt.xlabel("cantidad de entrenamientos")
         plt.ylabel("Presicion")
         plt.show()
+
+    def plotError(self,x,y,title=''):
+        plt.ylim([0,1])
+        plt.plot(x,y)
+        plt.title(title)
+        plt.xlabel("cantidad de epocas")
+        plt.ylabel("Error cuadratico")
+        plt.show()
