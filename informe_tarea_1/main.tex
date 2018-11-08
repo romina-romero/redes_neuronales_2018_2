@@ -89,8 +89,40 @@
 
 % ======================= INICIO DEL DOCUMENTO =======================
 \section{Implementación}
-\section{Dataset}
-El dataset elegido es el \"Artificial Characters Data Set\" (\url{https://archive.ics.uci.edu/ml/datasets/Artificial+Characters})
+
+El código de la implementación se encuentra en el repositorio de github \url{https://github.com/romina-romero/redes_neuronales_2018_2}. El lenguaje utilizado es python. La red neuronal se encuentra implementada en la carpeta trabajo\_incremental. Aquí se incluye además una serie de tests que muestran gráficas de ejemplo. 
+
+Las clases usadas para procesar el dataset elegido son \textbf{SigmoidNeuron}, \textbf{NeuronLayer} y \textbf{Neuralnetwork}. NeuralNetwork y SigmoidNeuron incluyen unittest que validan su funcionamiento. 
+
+Para poder ejecutar los tests y hacer uso de esta implementación, se debe instalar el paquete numpy y matplotlib de python con una terminal:
+\begin{sourcecode}[\label{instalacion}]{bash}{Instalación de dependencias.}
+pip install numpy matplotlib
+\end{sourcecode}
+
+En \url{https://pip.pypa.io/en/stable/installing/} se explica como instalar pip.
+
+Para ejecutar los unittest:
+\begin{sourcecode}[\label{instalacion}]{bash}{Ejecución de unittest.}
+cd trabajo_incremental
+python SigmoidNeuron.py
+python NeuralNetwork.py
+\end{sourcecode}
+
+Se incluye una colección de pruebas que se ha hecho durante el curso, a modo de ejemplo, los cuales entregan gráficos. Estos se encuentran en trabajo_incremental
+\section{Spambase Data Set}
+El dataset elegido es el \"Spambase Data Set\" (\url{https://archive.ics.uci.edu/ml/datasets/Spambase}). Es una colección de 4601 emails, clasificados como spam o no spam, caracterizados en un vector de largo 57. \\
+
+Cada email se describe de la siguiente forma:
+\begin{itemize}
+\item 48 porcentajes de aparición de palabras claves sobre el total de palabras del email. Una "palabra" en este caso es cualquier conjunto de caracteres alfanuméricos delimitados por caracteres no alfanuméricos.
+\item 6 porcentajes de aparición de caracteres claves sobre el total de caracteres del email.
+\item Promedio de los largos de las secuencias ininterrumpidas de mayúsculas, en el email.
+\item Largo de la secuencia ininterrumpida de mayúsculas más larga.
+\item Total de letras mayúsculas del email.
+
+\end{itemize}
+El vector incluye además un ítem número 58, donde se indica si es (1) o no (0) es spam.
+
 \section{Tests}
 \section{Resultados}
 

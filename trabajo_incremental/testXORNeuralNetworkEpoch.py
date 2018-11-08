@@ -4,7 +4,7 @@ import random
 
 def main():
     neuralNetwork = NeuralNetwork()
-    neuralNetwork.make(2,[2,1],0.5)
+    neuralNetwork.make(2,[3,1],0.5)
     nbepoch = 5000
     dataset = [[0,0],[0,1],[1,0],[1,1]]
     outputs = [[0],[1],[1],[0]]
