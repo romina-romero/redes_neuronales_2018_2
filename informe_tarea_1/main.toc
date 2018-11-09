@@ -1,6 +1,9 @@
 \select@language {spanish}
 \contentsline {section}{\numberline {1}Implementaci\IeC {\'o}n}{1}{section.1}
-\contentsline {subsection}{\numberline {1.1}Instalaci\IeC {\'o}n de dependencias}{1}{subsection.1.1}
 \contentsline {section}{\numberline {2}Spambase Data Set}{1}{section.2}
-\contentsline {section}{\numberline {3}Tests}{1}{section.3}
-\contentsline {section}{\numberline {4}Resultados}{1}{section.4}
+\contentsline {section}{\numberline {3}Tests}{2}{section.3}
+\contentsline {subsection}{\numberline {3.1}Dataset ordenado}{2}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Dataset desordenado}{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Distinto n\IeC {\'u}mero de capas ocultas}{12}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Cambios en neuronas}{17}{subsection.3.4}
+\contentsline {section}{\numberline {4}Resultados}{17}{section.4}

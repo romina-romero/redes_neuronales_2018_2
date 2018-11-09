@@ -90,16 +90,16 @@
 % ======================= INICIO DEL DOCUMENTO =======================
 \section{Implementación}
 
-El código de la implementación se encuentra en el repositorio de github \url{https://github.com/romina-romero/redes_neuronales_2018_2}. El lenguaje utilizado es python. La red neuronal se encuentra implementada en la carpeta trabajo\_incremental. Aquí se incluye además una serie de tests que muestran gráficas de ejemplo. 
+El código de la implementación se encuentra en el repositorio de github \url{https://github.com/romina-romero/redes_neuronales_2018_2}. El lenguaje utilizado es python. La red neuronal se encuentra implementada en la carpeta trabajo\_incremental. Aquí se incluye además una serie de tests que muestran gráficas de ejemplo. \\
 
-Las clases usadas para procesar el dataset elegido son \textbf{SigmoidNeuron}, \textbf{NeuronLayer} y \textbf{Neuralnetwork}. NeuralNetwork y SigmoidNeuron incluyen unittest que validan su funcionamiento. 
+Las clases usadas para procesar el dataset elegido son \textbf{SigmoidNeuron}, \textbf{NeuronLayer} y \textbf{Neuralnetwork}. NeuralNetwork y SigmoidNeuron incluyen unittest que validan su funcionamiento. \\
 
 Para poder ejecutar los tests y hacer uso de esta implementación, se debe instalar el paquete numpy y matplotlib de python con una terminal:
 \begin{sourcecode}[\label{instalacion}]{bash}{Instalación de dependencias.}
-pip install numpy matplotlib
+pip install numpy matplotlib scipy
 \end{sourcecode}
 
-En \url{https://pip.pypa.io/en/stable/installing/} se explica como instalar pip.
+En \url{https://pip.pypa.io/en/stable/installing/} se explica como instalar pip.\\
 
 Para ejecutar los unittest:
 \begin{sourcecode}[\label{instalacion}]{bash}{Ejecución de unittest.}
@@ -108,13 +108,23 @@ python SigmoidNeuron.py
 python NeuralNetwork.py
 \end{sourcecode}
 
-Se incluye una colección de pruebas que se ha hecho durante el curso, a modo de ejemplo, los cuales entregan gráficos. Estos se encuentran en trabajo_incremental
+Se incluye una colección de pruebas que se ha hecho durante el curso, a modo de ejemplo, los cuales entregan gráficos. Estos se encuentran en trabajo\_incremental.\\
+
+Las pruebas oficiales con el dataset elegido se encuentran en la carpeta pruebas\_tarea\_1. Para ejecutarlo, en la terminal:
+\begin{sourcecode}[\label{instalacion}]{bash}{Ejecución de unittest.}
+cd pruebas_tarea_1
+python efecto_lr.py
+python efecto_shuffle.py
+python efecto_numero_capas.py
+python cambio_neuronas.py
+\end{sourcecode}
+
 \section{Spambase Data Set}
-El dataset elegido es el \"Spambase Data Set\" (\url{https://archive.ics.uci.edu/ml/datasets/Spambase}). Es una colección de 4601 emails, clasificados como spam o no spam, caracterizados en un vector de largo 57. \\
+El dataset elegido es el Spambase Data Set (\url{https://archive.ics.uci.edu/ml/datasets/Spambase}). Es una colección de 4601 emails, clasificados como spam o no spam, caracterizados en un vector de largo 57. \\
 
 Cada email se describe de la siguiente forma:
 \begin{itemize}
-\item 48 porcentajes de aparición de palabras claves sobre el total de palabras del email. Una "palabra" en este caso es cualquier conjunto de caracteres alfanuméricos delimitados por caracteres no alfanuméricos.
+\item 48 porcentajes de aparición de palabras claves sobre el total de palabras del email. Una palabra en este caso es cualquier conjunto de caracteres alfanuméricos delimitados por caracteres no alfanuméricos.
 \item 6 porcentajes de aparición de caracteres claves sobre el total de caracteres del email.
 \item Promedio de los largos de las secuencias ininterrumpidas de mayúsculas, en el email.
 \item Largo de la secuencia ininterrumpida de mayúsculas más larga.
@@ -123,10 +133,89 @@ Cada email se describe de la siguiente forma:
 \end{itemize}
 El vector incluye además un ítem número 58, donde se indica si es (1) o no (0) es spam.
 
-\section{Tests}
-\section{Resultados}
+El dataset será dividida en dos partes, 2302 para \textbf{entrenamiento} y 2299 para \textbf{test}.
 
+\section{Tests}
+
+Las pruebas se encuentran en la carpeta pruebas\_tarea\_1. La red tiene 57 entradas y una salida, y cada capa oculta tiene 38 neuronas. Se usó una sola capa oculta en todos los tests excepto en la prueba de variación de capas ocultas
+
+\subsection{Dataset ordenado}
+Todos los emails clasificados como spam se encuentran en la primera parte del dataset, y los que no, al final.\\
+
+\textbf{lr=0.1}
+\insertimage[\label{lr-01}]{../imagenes_tarea_1/lr_01_prec.png}{scale=0.8}{Precisión con learning rate=0.1, dataset ordenado}
+\insertimage[\label{lr-01}]{../imagenes_tarea_1/lr_01_error.png}{scale=0.8}{Error con learning rate=0.1, dataset ordenado}
+
+\textbf{lr=0.5}
+\insertimage[\label{lr-05}]{../imagenes_tarea_1/lr_05_prec.png}{scale=0.8}{Precisión con learning rate=0.5, dataset ordenado}
+\insertimage[\label{lr-05}]{../imagenes_tarea_1/lr_05_error.png}{scale=0.8}{Error con learning rate=0.5, dataset ordenado}
+
+\textbf{lr=1.0}
+\insertimage[\label{lr-10}]{../imagenes_tarea_1/lr_10_prec.png}{scale=0.8}{Precisión con learning rate=1.0, dataset ordenado}
+\insertimage[\label{lr-10}]{../imagenes_tarea_1/lr_10_error.png}{scale=0.8}{Error con learning rate=1.0, dataset ordenado}
+
+\textbf{lr=1.5}
+\insertimage[\label{lr-15}]{../imagenes_tarea_1/lr_15_prec.png}{scale=0.8}{Precisión con learning rate=1.5, dataset ordenado}
+\insertimage[\label{lr-15}]{../imagenes_tarea_1/lr_15_error.png}{scale=0.8}{Error con learning rate=1.5, dataset ordenado}
+
+
+\subsection{Dataset desordenado}
+Al dataset se le aplicó la función \textit{shuffle} que desordena la lista.\\
+
+\textbf{lr=0.1}
+\insertimage[\label{lr-01-sh}]{../imagenes_tarea_1/lr_01_prec_shuffle.png}{scale=0.8}{Precisión con learning rate=0.1, dataset desordenado}
+\insertimage[\label{lr-01-sh}]{../imagenes_tarea_1/lr_01_error_shuffle.png}{scale=0.8}{Error con learning rate=0.1, dataset desordenado}
+
+\textbf{lr=0.5}
+\insertimage[\label{lr-05-sh}]{../imagenes_tarea_1/lr_05_prec_shuffle.png}{scale=0.8}{Precisión con learning rate=0.5, dataset desordenado}
+\insertimage[\label{lr-05-sh}]{../imagenes_tarea_1/lr_05_error_shuffle.png}{scale=0.8}{Error con learning rate=0.5, dataset desordenado}
+
+\textbf{lr=1.0}
+\insertimage[\label{lr-10-sh}]{../imagenes_tarea_1/lr_10_prec_shuffle.png}{scale=0.8}{Precisión con learning rate=1.0, dataset desordenado}
+\insertimage[\label{lr-10-sh}]{../imagenes_tarea_1/lr_10_error_shuffle.png}{scale=0.8}{Error con learning rate=1.0, dataset desordenado}
+
+\textbf{lr=1.5}
+\insertimage[\label{lr-15-sh}]{../imagenes_tarea_1/lr_15_prec_shuffle.png}{scale=0.8}{Precisión con learning rate=1.5, dataset desordenado}
+\insertimage[\label{lr-15-sh}]{../imagenes_tarea_1/lr_15_error_shuffle.png}{scale=0.8}{Error con learning rate=1.5, dataset desordenado}
+
+
+\subsection{Distinto número de capas ocultas}
+Con learning rate 0.1 y 38 neutonas en cada capa oculta.\\
+
+\textbf{Una capa oculta}\\
+
+Tiempo total ejecución: 847 segundos.
+
+\insertimage[\label{c-1}]{../imagenes_tarea_1/1_capa_prec.png}{scale=0.8}{Precisión de red neuronal con una capa oculta}
+\insertimage[\label{c-1}]{../imagenes_tarea_1/1_capa_error.png}{scale=0.8}{Error de red neuronal con una capa oculta}
+
+\textbf{Dos capas ocultas}\\
+
+Tiempo total ejecución: 1607 segundos.
+
+\insertimage[\label{c-2}]{../imagenes_tarea_1/2_capas_prec.png}{scale=0.8}{Precisión de red neuronal con dos capas ocultas}
+\insertimage[\label{c-2}]{../imagenes_tarea_1/2_capas_error.png}{scale=0.8}{Error de red neuronal con dos capas ocultas}
+
+
+\textbf{Tres capas ocultas}\\
+
+Tiempo total ejecución: 1883 segundos.
+
+\insertimage[\label{c-3}]{../imagenes_tarea_1/3_capas_prec.png}{scale=0.8}{Precisión de red neuronal con tres capas ocultas}
+\insertimage[\label{c-3}]{../imagenes_tarea_1/3_capas_error.png}{scale=0.8}{Error de red neuronal con tres capas ocultas}
+
+\subsection{Cambios en neuronas}
+Las neuronas que más cambian son las más cercanas a las salidas, segun el experimento hecho en el archivo cambio\_neuronas.py.
 %\input{lib/etc/example} % Ejemplo, se puede borrar
 
+\section{Resultados}
+\begin{itemize}
+\item Para nuestro dataset, la precisión queda estancada en 0.6. Se cree que incrementando la cantidad de salidas pudiese mejorar. Queda propuesta esta prueba.
+\item Al desordenar el dataset, el resultado final empeora, pues es inestable. Para el caso de learning rate 0.1, se puede ver claramente como va decayendo la curva de error vs incremento de la presición.
+\item El learning rate puede funcionar bien hasta 0.5, pero después no permite que aprenda bien, el error se dispara y no converge.
+\item El resultado es similar al agregar una o dos capas adicionales, aunque tiene pequeños saltos hacia la presición 0.7. El tiempo de ejecución aumenta proporcionalmente.
+\item Las neuronas que más cambian son las cercanas a la salida.
+\item Se cree que con una arquitectura diferente se puede mejorar el resultado.
+\end{itemize}
 % FIN DEL DOCUMENTO
 \end{document}

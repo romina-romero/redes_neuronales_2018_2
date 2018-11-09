@@ -12,7 +12,6 @@ def main():
     errors = neuralNetwork.train(dataset,outputs,nbepoch)
     tester = Tester()
     tester.plotError(range(5000),errors, "Red neuronal entrenada con XOR, 5000 epocas")
-
-
+    
 if __name__ == '__main__':
     main()

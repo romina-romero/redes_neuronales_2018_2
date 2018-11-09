@@ -12,6 +12,16 @@ class NeuralNetwork:
             prev_outputs = self.layers[index].feed(prev_outputs)
         return prev_outputs
     
+    def print_arch(self):
+        for layer in self.layers:
+            print "***layer********"
+            for neuron in layer.neurons:
+                print "neurona*"
+                print "pesos:",neuron.weights
+                print "bias:",neuron.bias
+                print "*"
+            print "***end-layer****"
+
     def make(self,input_size,layer_sizes,lr=0.1):
         self.layers = []
         for layer_index in range(len(layer_sizes)):
@@ -66,7 +76,29 @@ class NeuralNetwork:
                 error+=self.train(dataset[index],outputs_values[index])**2
             errors.append(error)
         return errors   
-
+    def diff(self,n2):
+        l = []
+        for il in range(len(self.layers)):
+            dneurons = []
+            for ine in range(len(self.layers[il].neurons)):
+                w = []
+                for iw in range(len(self.layers[il].neurons[ine].weights)):
+                    w.append(abs(self.layers[il].neurons[ine].weights[iw]-n2.layers[il].neurons[ine].weights[iw]))
+                dneurons.append(SigmoidNeuron(w,abs(self.layers[il].neurons[ine].bias-n2.layers[il].neurons[ine].bias),self.layers[il].neurons[ine].lr))
+            l.append(NeuronLayer(dneurons))
+        return NeuralNetwork(l)
+    def copy(self):
+        l = []
+        for layer in self.layers:
+            neurons = []
+            for neuron in layer.neurons:
+                w = []
+                for we in neuron.weights:
+                    w.append(we)
+                neurons.append(SigmoidNeuron(w,neuron.bias,neuron.lr))
+            l.append(NeuronLayer(neurons))
+        return NeuralNetwork(l)
+        
 class TestMakeNeuralNetwork(unittest.TestCase):
     def testMake(self):
         n = NeuralNetwork()
