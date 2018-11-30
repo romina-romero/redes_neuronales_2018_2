@@ -1,0 +1,254 @@
+% Template:     Informe/Reporte LaTeX
+% Documento:    Archivo principal
+% Versión:      6.0.0 (13/10/2018)
+% Codificación: UTF-8
+%
+% Autor: Pablo Pizarro R. @ppizarror
+%        Facultad de Ciencias Físicas y Matemáticas
+%        Universidad de Chile
+%        pablo.pizarro@ing.uchile.cl, ppizarror.com
+%
+% Manual template: [http://latex.ppizarror.com/Template-Informe/]
+% Licencia MIT:    [https://opensource.org/licenses/MIT/]
+
+% CREACIÓN DEL DOCUMENTO
+\documentclass[letterpaper,11pt]{article} % Articulo tamaño carta, 11pt
+\usepackage[utf8]{inputenc} % Codificación UTF-8
+
+% INFORMACIÓN DEL DOCUMENTO
+\def\titulodelinforme {Tarea 2}
+\def\temaatratar {Algoritmo Genético}
+
+\def\autordeldocumento {Romina Romero Oropesa}
+\def\nombredelcurso {Redes Neuronales y Programación Genética}
+\def\codigodelcurso {CC-5114}
+
+\def\nombreuniversidad {Universidad de Chile}
+\def\nombrefacultad {Facultad de Ciencias Físicas y Matemáticas}
+\def\departamentouniversidad {Departamento de Ciencias de la Computación}
+\def\imagendepartamento {departamentos/dcc}
+\def\imagendepartamentoescala {0.2}
+\def\localizacionuniversidad {Santiago, Chile}
+
+% INTEGRANTES, PROFESORES Y FECHAS
+\def\tablaintegrantes {
+\begin{tabular}{ll}
+    Alumna:
+	& \begin{tabular}[t]{@{}l@{}}
+		Romina Romero Oropesa
+	\end{tabular} \\\\
+	Profesor:
+	& \begin{tabular}[t]{@{}l@{}}
+		Alexandre Bergel
+	\end{tabular} \\\\
+	Auxiliares:
+	& \begin{tabular}[t]{@{}l@{}}
+		Juan Pablo Silva
+	\end{tabular} \\\\
+	Ayudantes:
+	& \begin{tabular}[t]{@{}l@{}}
+		Alonso Reyes Feris\\
+		Gabriel Chandía
+	\end{tabular} \\\\
+	
+	\multicolumn{2}{l}{Fecha de entrega: \today} \\
+	\multicolumn{2}{l}{\localizacionuniversidad}
+\end{tabular}}{
+}
+
+% CONFIGURACIONES
+\input{lib/config}
+
+% IMPORTACIÓN DE LIBRERÍAS
+\input{lib/env/imports}
+
+% IMPORTACIÓN DE FUNCIONES Y ENTORNOS
+\input{lib/cmd/all}
+
+% IMPORTACIÓN DE ESTILOS
+\input{lib/style/all}
+
+% CONFIGURACIÓN INICIAL DEL DOCUMENTO
+\input{lib/cfg/init}
+
+% INICIO DE LAS PÁGINAS
+\begin{document}
+
+% PORTADA
+\input{lib/page/portrait}
+
+% CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
+\input{lib/cfg/page}
+
+
+% TABLA DE CONTENIDOS - ÍNDICE
+\input{lib/page/index} % Índice, se puede borrar
+
+% CONFIGURACIONES FINALES
+\input{lib/cfg/final}
+
+% ======================= INICIO DEL DOCUMENTO =======================
+\section{Problema: N-queen}
+
+El problema seleccionado es el N-queen. La tarea es posicionar N reinas en un tablero de agedrez de NxN, sin que se ataquen entre si. Esto quiere decir que:
+
+\begin{itemize}
+\item No debe haber dos reinas en la misma vertical.
+\item No debe haber dos reinas en la misma horizontal.
+\item No debe haber dos reinas en la misma diagonal.
+\end{itemize}
+
+En el presente trabajo, se utiliza un algoritmo genético para resolver el problema. \\
+
+El vector de genes corresponde a la concatenación de las filas. Cada posición representa a una celda. Si hay posicionada una reina en la celda, en su posición habrá un 1. De lo contrario, habrá un 0. Sea N el número de reinas a ubicar, el ancho y alto del tablero, la secuencia genética será de largo NxN,y el alfabeto será [0,1].\\
+
+La función de fitness revisa cada una de las horizontales, verticales y diagonales. El algoritmo simplemente, si encuentra una reina en una línea, cada vez que encuentre otra suma uno al costo de la solución. La función de fitness es -1*costo. Así, la solución óptima entregará un cero.\\
+
+$fitness(t) = -1*(t.reviewHorizontals()+t.reviewVerticals()+t.reviewDiagonals()+t.repeated())$\\
+
+Sumamos también la cantidad de índices repetidos, pues también se consideran reinas mal ubicadas.
+  
+
+\section{Descripción del programa}
+
+Para poder ejecutar los tests y hacer uso de esta implementación, se debe instalar el paquete numpy y matplotlib de python con una terminal:
+
+\begin{sourcecode}[\label{instalacion}]{bash}{Instalación de dependencias.}
+pip install numpy matplotlib scipy
+\end{sourcecode}
+
+En \url{https://pip.pypa.io/en/stable/installing/} se explica como instalar pip.\\
+
+Se implementa la clase Individual y Population para modelar al algoritmo genético. En la clase Individual se hace el crossover y mutación. En la clase Population se implementa la reproducción.\\
+
+Para facilitar la modificación de hiperparámetros, se implementa la clase Tester, en cuyo constructor se define cada uno de ellos:\\
+
+\begin{sourcecode}[\label{hiperparametros}]{python}{Definición de hiperparámetros}
+class Tester:
+    def __init__(self,fitnessFunction,alphabeth=[0,1],genSize=128,populationSize=100,threshold=0,cleanFunction=ident,mutateFunction=ident,visualizationFunction=display):
+        self.fitnessFunction = fitnessFunction
+        self.alphabeth = alphabeth
+        self.genSize = genSize
+        self.populationSize = populationSize
+        self.threshold=threshold
+        self.cleanFunction=cleanFunction
+        self.mutateFunction=mutateFunction
+        self.visualizationFunction=visualizationFunction
+\end{sourcecode}
+
+\begin{itemize}
+\item \textbf{fitnessFunction:} función de fitness con que se mide cada solución.
+\item \textbf{alphabeth:} alfabeto al cual pertenece cada gen.
+\item \textbf{genSize:} tamaño de la secuencia genética.
+\item \textbf{populationSize:} tamaño de la población de cada generación.
+\item \textbf{threshold:} valor máximo que puede tomar la función fitness, valor que toma al alcanzar la solución.
+\item \textbf{cleanFunction:} función que se ejecuta luego de crearse una secuencia genética. Por defecto no se hace nada.
+\item \textbf{mutateFunction:} función que se ejecuta luego de mutarse la secuencia genética. Por defecto no se hace nada.
+\item \textbf{visualizationFunction:} función que "imprime" al individuo en pantalla. Por defecto se imprimen los genes.
+\end{itemize}
+
+Por otro lado, para facilitar el manejo y revisión de tableros, se creó la clase Board. Esta tiene unittest asociados. Para ejecutarlo, escribir en línea de comando:
+
+\begin{sourcecode}[\label{unittestboard}]{bash}{Unittest clase board.}
+python Board.py
+\end{sourcecode}
+
+Para la ejecución del algoritmo genético, cada generación tiene el mismo tamaño. Además, si tras 50 generaciones no se muestra un candidato mejor, se asume estancado, y se detiene el algoritmo.\\
+
+Para terminar, se realizó 4 tests que se pueden ejecutar por línea de comando:
+
+\begin{sourcecode}[\label{exectest}]{bash}{Ejecutar tests}
+python test[nombre del test].py
+\end{sourcecode}
+
+Los archivos de test son los siguientes:
+
+\begin{itemize}
+\item \textbf{testSecretBitSequence128.py:} test con el reto de descubrir la secuencia de 128 bits oculta, cuya función de fitness es la cantidad de aciertos de cada individuo.
+\item \textbf{testSecretBitSequence1000.py:} mismo test anterior, pero con 1000 bits.
+\item \textbf{testSecretVowelSequence128.py:} mismo test, pero el alfabeto, en lugar de ser [0,1], es el conjunto de vocales.
+\item \textbf{testSecretLettertSequence128.py:} mismo test, pero el alfabeto corresponde al abecedario completo.
+
+\end{itemize}
+
+Si se requiere modificar los hiperparámetros, basta con hacerlo al momento ded instanciar la clase Tester.
+
+\section{Evaluación}
+
+\subsection{Secuencia oculta de 128 bits}
+
+Población de 100 individuos con 128 genes.
+
+\begin{itemize}
+\item Mejor solución: encontrada
+\item Número de generaciones: 29
+\item Tiempo de ejecución: 1,65 segundos
+\end{itemize}
+
+\insertimage[\label{t1}]{imagenes/128_bits.png}{scale=0.8}{Métricas para secuencia oculta de 128 bits}
+
+\subsection{Secuencia oculta de 1000 bits}
+Población de 200 individuos con 1000 genes.
+
+\begin{itemize}
+\item Mejor solución: 905 ítemes encontrados (óptimo no encontrado)
+\item Número de generaciones: 221
+\item Tiempo de ejecución: 355,8 segundos
+\end{itemize}
+
+\insertimage[\label{t1}]{imagenes/1000_bits.png}{scale=0.8}{Métricas para secuencia oculta de 1000 bits}
+
+\subsection{Secuencia oculta de 128 vocales}
+Población con 100 individuos con 128 genes.
+
+\begin{itemize}
+\item Mejor solución: 127 ítemes encontrados (óptimo no encontrado)
+\item Número de generaciones: 160
+\item Tiempo de ejecución: 9,2 segundos
+\end{itemize}
+
+\insertimage[\label{t1}]{imagenes/128_vowels.png}{scale=0.8}{Métricas para secuencia oculta de 128 vocales}
+
+\subsection{Secuencia oculta de 128 letras}
+Población con 200 individuos con 128 genes.
+
+\begin{itemize}
+\item Mejor solución: 119 ítemes encontrados (óptimo no encontrado)
+\item Número de generaciones: 181
+\item Tiempo de ejecución: 37,38 segundos
+\end{itemize}
+
+\insertimage[\label{t1}]{imagenes/128_letters.png}{scale=0.8}{Métricas para secuencia oculta de 128 letras}
+
+\subsection{NQueen N=10}
+Población con 200 individuos con 100 genes.
+
+\begin{itemize}
+\item Mejor solución: 1 ataque de reinas (óptimo no encontrado)
+\item Número de generaciones: 109
+\item Tiempo de ejecución: 185.5 segundos
+\end{itemize}
+
+\insertimage[\label{t1}]{imagenes/10_nqueen.png}{scale=0.8}{Métricas para nqueen, N=10}
+
+\subsection{NQueen N=20}
+Población con 200 individuos con 400 genes.
+
+\begin{itemize}
+\item Mejor solución: 3 ataques de reinas (óptimo no encontrado)
+\item Número de generaciones: 177
+\item Tiempo de ejecución: 1098.3 segundos
+\end{itemize}
+
+\insertimage[\label{t1}]{imagenes/20_nqueen.png}{scale=0.8}{Métricas para nqueen, N=20}
+
+\section{Discusión}
+
+El problema no se resolvió en su totalidad. A medida que la cantidad de reinas aumenta, el número de errores también.\\
+
+Sin embargo, en todos los ejemplos podemos ver cómo se va mejorando generación tras generación. En el caso de la secuencia oculta de bits, se obtiene buenos resultados. A medida que se va complejizando el problema (largo de alfabeto y largo de secuencia genética), esto va dificultándose. Llegado un instante, las mejoras se producen tras demasiadas generaciones (como se va viendo en todas las curvas). Fue necesario determinar cuando el algoritmo quedó estancado, para no dejar el algoritmo ejecutándose por siempre.\\
+
+Para mejorar el algoritmo, podría probarse performance distintas de mezclado, hacer algún procesamiento sobre los datos una vez mezclados, entre otras cosas. Por esto se deja disponible la opción de agregar funciones de procesamiento. Pero, de todas formas, si se encuentra una manera más simple de modelar el problema, sería la mejor alternativa para mejorar la performance del algoritmo.
+
+% FIN DEL DOCUMENTO
+\end{document}
