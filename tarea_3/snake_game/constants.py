@@ -1,0 +1,19 @@
+# colores
+WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+RED = (255, 0, 0)
+BLACK = (0, 0, 0)
+
+#tamanos
+BOX_SIZE = 15
+
+#pixeles
+SEGMENT_SIZE = 15
+SEGMENT_MARGIN = 3
+WINDOW_SIZE = (SEGMENT_SIZE+SEGMENT_MARGIN*2)*BOX_SIZE
+
+#enum
+TOP = 0
+RIGHT = 1
+BOTTOM = 2
+LEFT = 3

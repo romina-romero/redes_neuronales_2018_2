@@ -1,0 +1,243 @@
+% Template:     Informe/Reporte LaTeX
+% Documento:    Archivo principal
+% Versión:      6.0.0 (13/10/2018)
+% Codificación: UTF-8
+%
+% Autor: Pablo Pizarro R. @ppizarror
+%        Facultad de Ciencias Físicas y Matemáticas
+%        Universidad de Chile
+%        pablo.pizarro@ing.uchile.cl, ppizarror.com
+%
+% Manual template: [http://latex.ppizarror.com/Template-Informe/]
+% Licencia MIT:    [https://opensource.org/licenses/MIT/]
+
+% CREACIÓN DEL DOCUMENTO
+\documentclass[letterpaper,11pt]{article} % Articulo tamaño carta, 11pt
+\usepackage[utf8]{inputenc} % Codificación UTF-8
+
+% INFORMACIÓN DEL DOCUMENTO
+\def\titulodelinforme {Tarea 3}
+\def\temaatratar {Proyecto: Simulador de snake con neuroevolución}
+
+\def\autordeldocumento {Romina Romero Oropesa}
+\def\nombredelcurso {Redes Neuronales y Programación Genética}
+\def\codigodelcurso {CC-5114}
+
+\def\nombreuniversidad {Universidad de Chile}
+\def\nombrefacultad {Facultad de Ciencias Físicas y Matemáticas}
+\def\departamentouniversidad {Departamento de Ciencias de la Computación}
+\def\imagendepartamento {departamentos/dcc}
+\def\imagendepartamentoescala {0.2}
+\def\localizacionuniversidad {Santiago, Chile}
+
+% INTEGRANTES, PROFESORES Y FECHAS
+\def\tablaintegrantes {
+\begin{tabular}{ll}
+    Alumna:
+	& \begin{tabular}[t]{@{}l@{}}
+		Romina Romero Oropesa
+	\end{tabular} \\\\
+	Profesor:
+	& \begin{tabular}[t]{@{}l@{}}
+		Alexandre Bergel
+	\end{tabular} \\\\
+	Auxiliares:
+	& \begin{tabular}[t]{@{}l@{}}
+		Juan Pablo Silva
+	\end{tabular} \\\\
+	Ayudantes:
+	& \begin{tabular}[t]{@{}l@{}}
+		Alonso Reyes Feris\\
+		Gabriel Chandía
+	\end{tabular} \\\\
+	
+	\multicolumn{2}{l}{Fecha de entrega: \today} \\
+	\multicolumn{2}{l}{\localizacionuniversidad}
+\end{tabular}}{
+}
+
+% CONFIGURACIONES
+\input{lib/config}
+
+% IMPORTACIÓN DE LIBRERÍAS
+\input{lib/env/imports}
+
+% IMPORTACIÓN DE FUNCIONES Y ENTORNOS
+\input{lib/cmd/all}
+
+% IMPORTACIÓN DE ESTILOS
+\input{lib/style/all}
+
+% CONFIGURACIÓN INICIAL DEL DOCUMENTO
+\input{lib/cfg/init}
+
+% INICIO DE LAS PÁGINAS
+\begin{document}
+
+% PORTADA
+\input{lib/page/portrait}
+
+% CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
+\input{lib/cfg/page}
+
+
+% TABLA DE CONTENIDOS - ÍNDICE
+\input{lib/page/index} % Índice, se puede borrar
+
+% CONFIGURACIONES FINALES
+\input{lib/cfg/final}
+
+% ======================= INICIO DEL DOCUMENTO =======================
+\section{Problema: Simulacro de snake}
+\subsection{El juego}
+El juego snake consiste en controlar una larga y delgada criatura similar a una serpiente, que viaja recogiendo alimentos. Cada vez que come un alimento, la criatura crece y se suma puntos. El juego se pierde cuando la serpiente choca con su propia cola, o con alguna pared. 
+
+\insertimage[\label{game}]{imagenes/snake_game.png}{width=5cm}{Juego snake}
+
+Para este proyecto, el juego tiene las siguientes características:
+
+\begin{itemize}
+\item El tablero es de 15x15 posiciones.
+\item Se inicia con una serpiente tamaño 2.
+\item Si choca con el borde, pierde. Si choca con su cola, pierde.
+\item Solo aparece un alimento a la vez. Cuando es comido, aparece uno nuevo.
+\end{itemize}
+
+Para ejemplificar, se incluye una implementación simple del juego en el archivo \textit{play\_game.py}. Ejecutar el siguiente comando:
+
+\begin{sourcecode}[\label{playgame}]{bash}{Ejecutar juego de ejemplo}
+python3 play_game.py
+\end{sourcecode}
+
+Las paredes se representan con color rojo, la serpiente con color blanco, el alimento amarillo y el fondo negro.
+
+\subsection{Modelado}
+
+La red neuronal que modela el problema, contiene 6 entradas, una capa oculta con 10 neuronas y 3 salidas. \\
+
+Las entradas son las siguientes:
+
+\begin{itemize}
+\item  En la dirección actual, distancia a la comida (si no hay comida en mi dirección, se setea el tamaño del tablero).
+\item En la dirección actual, distancia al obstáculo más próximo. Se considera obstáculo algún segmento de snake y los bordes.
+\item Si roto en sentido antihorario, distancia a la comida.
+\item Si roto en sentido antihorario, distancia al obstáculo más próximo.
+\item Si roto en sentido horario, distancia a la comida.
+\item Si roto en sentido horario, distancia al obstáculo más próximo.
+\end{itemize}
+
+Las 3 salidas representan:
+\begin{itemize}
+\item Mantener dirección.
+\item Rotar en sentido antihorario.
+\item Rotar en sentido horario.
+\end{itemize}
+
+El mayor es quien indica que movimiento debo hacer a continuación.
+
+La función de fitness inicia un nuevo juego. El resultado es el siguiente:
+\insertequationcaptioned[\label{eqn:formula}]{
+fitness_r = tamano\_snake + \frac{desplazamiento\_antes\_de\_perder}{225}}{Función de fitness.}
+
+La función finaliza el juego si snake ha hecho 225 desplazamientos sin crecer (se considera que ha entrado en un loop). Se premia el tamaño de la serpiente, y su capacidad de mantenerse viva.
+
+\section{Descripción del programa}
+
+\subsection{Instalación}
+
+El código de la implementación se encuentra en el repositorio de github \url{https://github.com/romina-romero/redes_neuronales_2018_2}. El lenguaje utilizado es \textbf{python 3}. La tarea se encuentra en la carpeta tarea\_3. \\
+
+Para poder ejecutar los tests y hacer uso de esta implementación, se debe instalar el paquete numpy, matplotlib de python3 con una terminal:
+
+\begin{sourcecode}[\label{instalacion}]{bash}{Instalación de dependencias.}
+pip install numpy matplotlib scipy pygame
+\end{sourcecode}
+
+Además, será neesario tener instalado el paquete python3-tk. Por ejemplo, para Ubuntu linux instalar asi:
+
+\begin{sourcecode}[\label{instalacion2}]{bash}{Instalación de python3-tk.}
+sudo apt-get install python3-tk
+\end{sourcecode}
+
+
+En \url{https://pip.pypa.io/en/stable/installing/} se explica como instalar pip.\\
+
+\subsection{Implementación de neuroevolución}
+
+Se utiliza la clase NeuralNetwork implementada en la tarea 2, agregando un método para transformar a la red en un vector de neuronas, y otro para decodificar y obtener la red nuevamente. Para correr los unit test de la clase, ejecutar:
+
+\begin{sourcecode}[\label{unittest}]{bash}{Unit-testing}
+python3 -m unittest neural_network/NeuralNetwork.py
+\end{sourcecode}
+
+
+
+Para neuroevolución, se implementan las clases Individual y Population.\\ 
+
+Cada instancia de la clase Individual contiene una red neuronal. Esta clase implementa el método crossover, en que las redes neuronales son transformadas a vectores de neuronas, luego combinadas. La cantidad de neuronas de cada parte es proporcional al fitness. La mutación consiste en un cambio aleatorio de algún peso o bias.\\
+
+La clase Population implementa la selección y reproducción. Para la selección, se ordena de mayor a menor fitness y se seleccionan los k mejores, donde k es la cantidad de seleccionados. La reproducción toma pares aleatorios y los combina para crear la nueva población. Es posible además indicar una cantidad de población elite. Este número indica cuántos individuos se conservan de la población original (ordenados por fitness).
+
+
+\subsection{Implementación simulador de snake}
+
+La clase Snake representa a la serpiente, la clase Segment a un segmento de la serpiente, la clase Food a la comida y la clase Board al tablero. Estas clases se usan para hacer el entrenamiento. La clase Board implementa el método \textit{fordward}, que permite hacer avanzar a snake en el tablero, además del método \textit{rotate} que cambia la dirección de snake. Implementa además los métodos \textit{food\_distance} (distancia a la comida) y \textit{obs\_distance} (distancia al primer obstáculo). Snake mantiene el parámetro \textit{alive} que indica si la serpiente sigue o no viva. \\
+
+Se provee además de un simulador, que permite usar una red neuronal para jugar. La función simulare se encuentra en el archivo helper.py.\\
+
+El archivo train\_snake.py entrena a la red neuronal mediante neuroevolución con snake. Al finalizar, se visualizará una simulación con la mejor red neuronal encontrada, y luego se despliega el gráfico de máximos, promedios y desviaciones estándar por generación.\\
+
+Para ejecutar el entrenamiento y simulación:
+
+\begin{sourcecode}[\label{train}]{bash}{Entrenamiento y simulación de snake}
+python3 train_snake.py 
+\end{sourcecode}
+
+Para modificar los hiperparámetros, en el sector superior del archivo train\_snake.py se encuentran las variables globales. Cambiarlas según se requiera:
+
+\begin{sourcecode}[\label{hiperparámetros}]{python}{Hiperparámetros.}
+POPULATION_SIZE = 100
+GENERATIONS = 1000
+SELECTION_SIZE = 20
+MUTATION_RATE = 0.3
+ELITE = 5
+\end{sourcecode}
+
+\begin{itemize}
+\item \textbf{POPULATION\_SIZE}: cantidad de individuos por generación.
+\item \textbf{GENERATIONS}: número de generaciones de entrenamiento.
+\item \textbf{SELECTION\_SIZE}: cantidad de seleccionados en proceso de selección.
+\item \textbf{MUTATION\_RATE}: porcentaje de individuos que mutarán.
+\item \textbf{ELITE}: número de individuos que se conservarán de una generación a otra según su fitness.
+\end{itemize}
+
+\section{Evaluación}
+
+Para la evaluación, se usaron los valores por defecto indicados en la sección anterior. Es decir, se entrenó con 1000 generaciones de 100 individuos. Los resultados obtenidos son los siguientes:
+
+\begin{itemize}
+\item Máximo valor de fitness: 7.058
+\item Tiempo de ejecución: 59 minutos
+\end{itemize}
+
+\insertimage[\label{grafico}]{imagenes/estadisticas.png}{width=10cm}{Estadísticas por generación}
+
+
+\section{Discusión}
+
+Se considera que en esta implementación, neuroevolución no resuelve el problema a cabalidad, pues se obtuvo un largo de serpiente de 7 en un tablero de 15 x 15, la cual es aun pequeña.
+
+\insertimage[\label{grafico}]{imagenes/snake_7.png}{width=5cm}{Snake de largo 7}
+
+Además, en el gráfico se observan algunos peaks de fitness, pero no hay un incremento en el tiempo.\\
+
+Se cree que para que funcione mejor, sería necesario pulir la función de fitness. \\
+
+En este ejemplo, la función de fitness ejecuta un solo juego. Las comidas aparecen de forma aleatoria, por lo que el ejecutar solo una vez el juego para evaluar, agrega un sesgo al resultado. Como mejora, es buena idea ejecutar una cantidad de veces el juego, y promediar los puntajes.\\
+
+Otro problema que se encontró, es que el puntaje entregado por mantenerse viva, tienden a hacer a la serpiente entrar en loops. Para corregirlo, en este ejemplo se detiene de manera abrupta al hacer 255 movimientos sin alcanzar una comida. Pero sería bueno desincentivar los loops castigando, por ejemplo, el pasar por el mismo lugar sin alcanzar una nueva comida.
+
+
+
+
+\end{document}

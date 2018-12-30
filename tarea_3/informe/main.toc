@@ -1,0 +1,10 @@
+\select@language {spanish}
+\contentsline {section}{\numberline {1}Problema: Simulacro de snake}{1}{section.1}
+\contentsline {subsection}{\numberline {1.1}El juego}{1}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Modelado}{1}{subsection.1.2}
+\contentsline {section}{\numberline {2}Descripci\IeC {\'o}n del programa}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Instalaci\IeC {\'o}n}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Implementaci\IeC {\'o}n de neuroevoluci\IeC {\'o}n}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Implementaci\IeC {\'o}n simulador de snake}{3}{subsection.2.3}
+\contentsline {section}{\numberline {3}Evaluaci\IeC {\'o}n}{4}{section.3}
+\contentsline {section}{\numberline {4}Discusi\IeC {\'o}n}{5}{section.4}
